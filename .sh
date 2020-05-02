@@ -1,5 +1,5 @@
 # webpack
-npm i webpack webpack-cli webpack-dev-server -D
+npm i webpack webpack-cli webpack-dev-server webpack-merge -D
 
 # 删除 dist
 npm i clean-webpack-plugin -D

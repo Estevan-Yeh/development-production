@@ -1,6 +1,6 @@
 # development-production
 
-> webpack 开发模式模板
+> webpack 开发模式
 
 ## Build Setup
 
@@ -25,7 +25,7 @@ npm run build
 
 ```shell
 # webpack
-npm i webpack webpack-cli webpack-dev-server -D
+npm i webpack webpack-cli webpack-dev-server webpack-merge -D
 
 # 删除 dist
 npm i clean-webpack-plugin -D

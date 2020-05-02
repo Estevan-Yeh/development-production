@@ -18,6 +18,11 @@ module.exports = merge(BaseConfig('development'), {
     hot: true,
     // 浏览器显示错误
     overlay: true,
+    // 默认页面
+    index: 'page_1.html',
+    historyApiFallback: {
+      rewrites: [{ from: /./, to: '/page_1.html' }]
+    },
     // 代理解决跨域
     proxy: {
       '/comments': {

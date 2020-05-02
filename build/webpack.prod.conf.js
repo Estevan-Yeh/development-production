@@ -2,6 +2,7 @@
  * 生产配置
  */
 
+const BaseConfig = require('./webpack.base.conf')
 const merge = require('webpack-merge') // 合并配置
 const MiniCssExtractPlugin = require('mini-css-extract-plugin') // 将 css 单独打包成文件
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin') // 压缩 css

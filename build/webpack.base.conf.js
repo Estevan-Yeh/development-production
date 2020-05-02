@@ -36,7 +36,7 @@ const fontLoader = [
     options: {
       name: '[name]-[hash:5].min.[ext]',
       limit: 5000, // 小于 5kb 使用 base64
-      publicPath: 'fonts/',
+      publicPath: '/fonts/',
       outputPath: 'fonts/'
     }
   }
@@ -49,6 +49,7 @@ const imageLoader = [
     options: {
       name: '[name]-[hash:5].min.[ext]',
       limit: 10000,
+      publicPath: '/images/',
       outputPath: 'images/',
       // 解决与 html-webpack-plugin 的冲突
       esModule: false
@@ -81,7 +82,10 @@ const BaseConfig = env => {
       : cssLoader // 开发环境：页内样式嵌入
 
   const config = {
-    entry: { index: './src/app.js' },
+    entry: {
+      page_1: './src/js/page_1.js',
+      page_2: './src/js/page_2.js'
+    },
     output: {
       // 打包路径
       publicPath: env === 'production' ? './' : '/',
@@ -92,7 +96,7 @@ const BaseConfig = env => {
     module: {
       rules: [
         { test: /\.js$/, exclude: /(node_modules)/, use: scriptLoader },
-        { test: /\.(sa|sc|c)ss$/, use: styleLoader },
+        { test: /\.(le|c)ss$/, use: styleLoader },
         { test: /\.(eot|woff2?|ttf|svg)$/, use: fontLoader },
         { test: /\.(png|jpg|jpeg|gif)$/, use: imageLoader },
         {
@@ -100,25 +104,32 @@ const BaseConfig = env => {
           loader: 'html-withimg-loader'
         }
       ]
+    },
+    optimization: {
+      splitChunks: {
+        chunks: 'all'
+      }
     }
   }
 
   // 根据 entry 自动生成 HtmlWebpackPlugin 配置，配置多页面
   for (const key in config.entry) {
-    plugins.push(
-      new HtmlWebpackPlugin({
-        filename: `${key}.html`,
-        template: path.resolve(__dirname, '..', `${key}.html`),
-        minify: {
-          // 压缩 HTML 文件
-          removeComments: true, // 移除 HTML 中的注释
-          collapseWhitespace: true, // 删除空白符与换行符
-          minifyCSS: true,
-          minifyJS: true
-        },
-        chunks: [key, 'jquery']
-      })
-    )
+    if (key !== 'vendors') {
+      plugins.push(
+        new HtmlWebpackPlugin({
+          filename: `${key}.html`,
+          template: path.resolve(__dirname, '..', `src/${key}.html`),
+          minify: {
+            // 压缩 HTML 文件
+            removeComments: true, // 移除 HTML 中的注释
+            collapseWhitespace: true, // 删除空白符与换行符
+            minifyCSS: true,
+            minifyJS: true
+          },
+          chunks: [key, 'jquery']
+        })
+      )
+    }
   }
 
   config.plugins = plugins
